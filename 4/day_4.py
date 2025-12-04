@@ -3,77 +3,49 @@ def read_input(filename):
     with open(filename, 'r', encoding='utf-8') as file:
         return [list(line.strip()) for line in file]
 
+def get_paper_rolls(grid):
+    """Extract paper roll coordinates from grid"""
+    rolls = set()
+    for y, row in enumerate(grid):
+        for x, cell in enumerate(row):
+            if cell == '@':
+                rolls.add((x, y))
+    return rolls, len(grid[0]) if grid and grid[0] else 0, len(grid)
+
+def count_adjacent(x, y, rolls, max_x, max_y):
+    """Count adjacent paper rolls for a given position"""
+    directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+    return sum(1 for dx, dy in directions 
+               if 0 <= x + dx < max_x and 0 <= y + dy < max_y and (x + dx, y + dy) in rolls)
+
+def find_removable(rolls, max_x, max_y):
+    """Find rolls with less than 4 adjacent rolls"""
+    return [pos for pos in rolls if count_adjacent(*pos, rolls, max_x, max_y) < 4]
+
 def part_1(data):
     """Find rolls of paper (@) with less than 4 adjacent paper rolls"""
-    return find_removable_rolls(data)
+    rolls, max_x, max_y = get_paper_rolls(data)
+    return find_removable(rolls, max_x, max_y)
 
 def part_2(data):
     """Iteratively remove rolls of paper with less than 4 adjacent rolls"""
-    if not data or not data[0]:
-        return 0
-    
-    # Create a working copy of the grid
-    grid = [row[:] for row in data]  # Deep copy
+    rolls, max_x, max_y = get_paper_rolls(data)
     total_removed = 0
     
-    while True:
-        # Find rolls to remove in this iteration
-        rolls_to_remove = find_removable_rolls(grid)
-        if not rolls_to_remove:
-            break  # No more rolls to remove
-        # Remove the rolls (set to '.')
-        for x, y in rolls_to_remove:
-            grid[y][x] = '.'
-        
-        total_removed += len(rolls_to_remove)
+    while rolls:
+        to_remove = find_removable(rolls, max_x, max_y)
+        if not to_remove:
+            break
+        for pos in to_remove:
+            rolls.discard(pos)
+        total_removed += len(to_remove)
     
     return total_removed
-
-
-def find_removable_rolls(grid):
-    """Find rolls of paper (@) with less than 4 adjacent paper rolls"""
-    if not grid or not grid[0]:
-        return []
-    
-    rows = len(grid)
-    cols = len(grid[0])
-    result = []
-    
-    # Define 8 adjacent directions (including diagonals)
-    directions = [
-        (-1, -1), (-1, 0), (-1, 1),  # top-left, top, top-right
-        (0, -1),           (0, 1),   # left, right
-        (1, -1),  (1, 0),  (1, 1)    # bottom-left, bottom, bottom-right
-    ]
-    
-    for y in range(rows):
-        for x in range(cols):
-            # Check if current position is a roll of paper
-            if grid[y][x] == '@':
-                # Count adjacent rolls of paper
-                adjacent_count = 0
-                
-                for dy, dx in directions:
-                    new_y = y + dy
-                    new_x = x + dx
-                    
-                    # Check if the adjacent position is within bounds
-                    if 0 <= new_y < rows and 0 <= new_x < cols:
-                        if grid[new_y][new_x] == '@':
-                            adjacent_count += 1
-                
-                # If less than 4 adjacent rolls, add to result
-                if adjacent_count < 4:
-                    result.append((x, y))
-    
-    return result
 
 def main():
     """Main function to run the solution"""
     input_data = read_input('./4/input.txt')
-    result = part_1(input_data)
-    print(f"Part 1 = {len(result)} positions found")
-    #print(f"Coordinates: {result}")
+    print(f"Part 1 = {len(part_1(input_data))} positions found")
     print(f"Part 2 = {part_2(input_data)}")
 
 if __name__ == "__main__":
