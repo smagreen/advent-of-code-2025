@@ -1,0 +1,10 @@
+{
+    "python.testing.pytestArgs": [
+        "."
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "python.testing.autoTestDiscoverOnSaveEnabled": true,
+    "python.testing.cwd": "${workspaceFolder}",
+    "python.testing.promptToConfigure": false
+}
