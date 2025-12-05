@@ -24,6 +24,9 @@ advent-of-code-2025/
 ├── 4/
 │   ├── day_4.py
 │   └── test_day_4.py
+├── 5/
+│   ├── day_5.py
+│   └── test_day_5.py
 ├── CODING_GUIDELINES.md
 ├── create_day.py
 └── pytest.ini
@@ -86,6 +89,7 @@ This project follows specific coding principles documented in [CODING_GUIDELINES
 | 2   | ⭐     | ⭐     | Pattern matching with regex |
 | 3   | ⭐     | ⭐     | Digit selection algorithms |
 | 4   | ⭐     | ⭐     | 2D grid paper roll detection |
+| 5   | ⭐     | ⭐     | Range processing and merging |
 
 ## Notes
 
