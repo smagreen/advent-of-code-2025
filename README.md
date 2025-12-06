@@ -90,6 +90,7 @@ This project follows specific coding principles documented in [CODING_GUIDELINES
 | 3   | ⭐     | ⭐     | Digit selection algorithms |
 | 4   | ⭐     | ⭐     | 2D grid paper roll detection |
 | 5   | ⭐     | ⭐     | Range processing and merging |
+| 6   | ⭐     | ⭐     | Trash Compactor - column-based operations with character positions |
 
 ## Notes
 
