@@ -163,10 +163,6 @@ cython_debug/
 **/input.txt
 input.txt
 
-# Exclude test data files that might contain puzzle examples
-**/test.txt
-test.txt
-
 # VS Code settings that might contain personal preferences
 .vscode/launch.json
 .vscode/tasks.json
