@@ -91,6 +91,7 @@ This project follows specific coding principles documented in [CODING_GUIDELINES
 | 4   | ⭐     | ⭐     | 2D grid paper roll detection |
 | 5   | ⭐     | ⭐     | Range processing and merging |
 | 6   | ⭐     | ⭐     | Trash Compactor - column-based operations with character positions |
+| 7   | ⭐     | ⭐     | Beam splitter simulation with path counting and memoization |
 
 ## Notes
 
