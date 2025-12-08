@@ -92,6 +92,7 @@ This project follows specific coding principles documented in [CODING_GUIDELINES
 | 5   | ⭐     | ⭐     | Range processing and merging |
 | 6   | ⭐     | ⭐     | Trash Compactor - column-based operations with character positions |
 | 7   | ⭐     | ⭐     | Beam splitter simulation with path counting and memoization |
+| 8   | ⭐     | ⭐½    | 3D point clustering and MST - Part 2 solved with Union-Find guidance |
 
 ## Notes
 
