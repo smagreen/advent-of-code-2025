@@ -1,0 +1,2 @@
+# Test input for day 3
+# Copy example data from the puzzle description
