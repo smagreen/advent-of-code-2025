@@ -85,14 +85,16 @@ This project follows specific coding principles documented in [CODING_GUIDELINES
 
 | Day | Part 1 | Part 2 | Notes |
 |-----|--------|--------|--------|
-| 1   | ⭐     | ⭐     | Dial simulation with zero crossings |
-| 2   | ⭐     | ⭐     | Pattern matching with regex |
-| 3   | ⭐     | ⭐     | Digit selection algorithms |
-| 4   | ⭐     | ⭐     | 2D grid paper roll detection |
-| 5   | ⭐     | ⭐     | Range processing and merging |
-| 6   | ⭐     | ⭐     | Trash Compactor - column-based operations with character positions |
-| 7   | ⭐     | ⭐     | Beam splitter simulation with path counting and memoization |
-| 8   | ⭐     | ⭐½    | 3D point clustering and MST - Part 2 solved with Union-Find guidance |
+| 1   | ⭐     | ⭐    | Dial simulation with zero crossings |
+| 2   | ⭐     | ⭐    | Pattern matching with regex |
+| 3   | ⭐     | ⭐    | Digit selection algorithms |
+| 4   | ⭐     | ⭐    | 2D grid paper roll detection |
+| 5   | ⭐     | ⭐    | Range processing and merging |
+| 6   | ⭐     | ⭐    | Trash Compactor - column-based operations with character positions |
+| 7   | ⭐     | ⭐    | Beam splitter simulation with path counting and memoization |
+| 8   | ⭐     | ⭐½   | 3D point clustering and MST - Part 2 solved with Union-Find guidance |
+| 9   | ⭐     |        | Part 1 solved without assistance, Part 2 can wait  |
+
 
 ## Notes
 
