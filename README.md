@@ -96,7 +96,7 @@ This project follows specific coding principles documented in [CODING_GUIDELINES
 | 9   | ⭐     | 🤖     | Largest Rectangle - Part 2 solved with RMQ (Gemini) |
 | 10  | ⭐     | 🤖     | BFS (Part 1) and Linear Algebra (Part 2 - Gemini 3) |
 | 11  | ⭐     | ⭐🤖   | Path counting in DAG - Logic via User & Gemini |
-| 12  | 🤖     |        | Backtracking Tiling (Gemini 2.0) |
+| 12  | 🤖     | ⭐     | Backtracking Tiling (Gemini 2.0) - Bonus Star |
 
 
 ## Notes
