@@ -95,6 +95,7 @@ This project follows specific coding principles documented in [CODING_GUIDELINES
 | 8   | ⭐     | ⭐½   | 3D point clustering and MST - Part 2 solved with Union-Find guidance |
 | 9   | ⭐     | 🤖     | Largest Rectangle - Part 2 solved with RMQ (Gemini) |
 | 10  | ⭐     | 🤖     | BFS (Part 1) and Linear Algebra (Part 2 - Gemini 3) |
+| 11  | ⭐     | ⭐🤖   | Path counting in DAG - Logic via User & Gemini |
 
 
 ## Notes
