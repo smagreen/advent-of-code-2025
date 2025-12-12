@@ -63,63 +63,120 @@ def get_variants(shape):
     # Sort variants by "compactness" or something? Just random is fine.
     return result
 
-def solve_region(w, h, present_ids, shapes):
-    to_place = []
-    for pid, count_val in enumerate(present_ids):
-       for _ in range(count_val):
-           to_place.append(pid)
-    
-    if not to_place: return True
-
-    # Sort by size (area) descending
-    to_place.sort(key=lambda pid: len(shapes[pid]), reverse=True)
-    
-    total_area = sum(len(shapes[pid]) for pid in to_place)
-    if total_area > w * h:
-        return False
+def solve_region(w, h, present_counts, shapes):
+    # Prepare pieces: group by ID to handle duplicates efficiently
+    import collections
+    piece_counts = collections.defaultdict(int)
+    for pid, count in enumerate(present_counts):
+        if count > 0:
+            piece_counts[pid] = count
         
-    shapes_variants = {pid: get_variants(shapes[pid]) for pid in set(to_place)}
-    occupied = set()
+    # Check total area constraints
+    total_piece_area = 0
+    for pid, count in piece_counts.items():
+        total_piece_area += len(shapes[pid]) * count
+        
+    if total_piece_area > w * h:
+        return False
     
-    def backtrack(idx):
-        if idx == len(to_place):
+    allowed_waste = (w * h) - total_piece_area
+    
+    # Precompute anchored variants for each piece type
+    # Anchor: (min_y, min_x) becomes (0, 0)
+    anchored_variants = {}
+    for pid in piece_counts:
+        variants = get_variants(shapes[pid])
+        anchored_list = []
+        for var, vw, vh in variants:
+            # Re-normalize so first cell is (0,0)
+            sorted_cells = sorted(list(var), key=lambda p: (p[1], p[0])) # sort by y, then x
+            ay, ax = sorted_cells[0][1], sorted_cells[0][0]
+            
+            # Shift all
+            shifted_var = []
+            for vx, vy in var:
+                shifted_var.append((vx - ax, vy - ay))
+            anchored_list.append(shifted_var)
+        anchored_variants[pid] = anchored_list
+
+    # Grid state
+    grid = [False] * (w * h)
+    
+    def solve(idx, waste_so_far):
+        # Find next empty cell
+        while idx < w * h and grid[idx]:
+            idx += 1
+            
+        if idx == w * h:
+            # Success if all pieces are used?
+            # Actually, we track pieces used. If we reached end, we must check if all pieces used.
+            # But simpler: if we successfully placed all pieces, we would have returned True earlier?
+            # No, we recurse on grid index.
+            # Check if any pieces left
+            for c in piece_counts.values():
+                if c > 0: return False # Should not happen if area check correct? 
+                # Actually, waste skipping consumes indices without using pieces.
+                # So we must verify all pieces are gone.
             return True
             
-        pid = to_place[idx]
-        
-        # Optimization: Try to place in first Available non-redundant spots? 
-        # Standard backtracking iterates all positions.
-        
-        for variant, vw, vh in shapes_variants[pid]:
-            # If present is larger than grid, skip
-            if vw > w or vh > h: continue
+        # Optimization: If waste exceeded
+        if waste_so_far > allowed_waste:
+            return False
             
-            for y in range(h - vh + 1):
-                for x in range(w - vw + 1):
-                    # Check overlap
+        x, y = idx % w, idx // w
+        
+        # Option 1: Try to place a piece here
+        for pid in list(piece_counts.keys()): # List to avoid modification issues if we stored differently
+            if piece_counts[pid] > 0:
+                piece_counts[pid] -= 1
+                
+                # Try all variants
+                for var in anchored_variants[pid]:
+                    # Check fit
                     can_fit = True
-                    for vx, vy in variant:
-                        if (x + vx, y + vy) in occupied:
+                    placed_indices = []
+                    for dx, dy in var:
+                        nx, ny = x + dx, y + dy
+                        nidx = ny * w + nx
+                        
+                        if not (0 <= nx < w and 0 <= ny < h): # Out of bounds
                             can_fit = False
                             break
+                        if grid[nidx]: # Collision
+                            can_fit = False
+                            break
+                        placed_indices.append(nidx)
                     
                     if can_fit:
                         # Place
-                        new_cells = []
-                        for vx, vy in variant:
-                            p = (x + vx, y + vy)
-                            occupied.add(p)
-                            new_cells.append(p)
-                        
-                        if backtrack(idx + 1):
+                        for p_idx in placed_indices:
+                            grid[p_idx] = True
+                            
+                        # Recurse
+                        if solve(idx + 1, waste_so_far):
                             return True
-                        
+                            
                         # Backtrack
-                        for p in new_cells:
-                            occupied.remove(p)
+                        for p_idx in placed_indices:
+                            grid[p_idx] = False
+                            
+                piece_counts[pid] += 1
+                
+        # Option 2: Skip this cell (Gap)
+        # Only allowed if we have waste budget
+        if waste_so_far < allowed_waste:
+            # Treat as filled (ignored)
+            # grid[idx] is technically "False" but we skip it.
+            # But the loop `while grid[idx]` needs it to be True or we manually skip.
+            # Let's mark it True to skip it in next calls
+            grid[idx] = True
+            if solve(idx + 1, waste_so_far + 1):
+                return True
+            grid[idx] = False
+            
         return False
 
-    return backtrack(0)
+    return solve(0, 0)
 
 def part_1(filename):
     shapes, regions = parse_input(filename)
@@ -129,11 +186,11 @@ def part_1(filename):
             count += 1
     return count
 
-def part_2(filename):
-    return 0
-
 def main():
     """Main function to run the solution"""
+    import sys
+    sys.setrecursionlimit(3000) # Grid size up to 50x50 = 2500 cells recurse
+    
     # Using 12/input.txt if it exists, otherwise test.txt for demonstration
     import os
     if os.path.exists('12/input.txt') and os.path.getsize('12/input.txt') > 0:
@@ -143,7 +200,6 @@ def main():
         
     print(f"Using {file_to_use}")
     print(f"Part 1 = {part_1(file_to_use)}")
-    print(f"Part 2 = {part_2(file_to_use)}")
 
 if __name__ == "__main__":
     main()
